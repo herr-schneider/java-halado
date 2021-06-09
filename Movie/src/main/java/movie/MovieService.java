@@ -29,6 +29,11 @@ public class MovieService {
                 .get();
     }
 
+    public List<Movie> theNewestFilms(){
+        return movies.stream()
+                .sorted(Comparator.comparing(Movie::getReleaseDate).reversed())
+                .collect(Collectors.toList());
+    }
 
     public List<Movie> searchFilms(String find){
         return movies.stream()

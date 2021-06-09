@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,6 +25,15 @@ class MovieServiceTest {
         Movie movie = movieService.theNewestFilm();
 
         assertEquals(movie.getReleaseDate(), LocalDate.of(2020,05, 03));
+    }
+
+    @Test
+    void theNewestFilmsTest() {
+        List<Movie> movies = movieService.theNewestFilms();
+
+        movies.stream()
+                .map(Movie::getName)
+                .forEach(System.out::println);
     }
 
     @Test
