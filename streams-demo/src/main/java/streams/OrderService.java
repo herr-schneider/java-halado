@@ -44,4 +44,35 @@ public class OrderService {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
+    public double sumBetweenDate(LocalDate start, LocalDate end){
+        return orders.stream()
+                .filter(o -> o.getOrderDate().isAfter(start))
+                .filter(o -> o.getOrderDate().isBefore(end))
+                .flatMap(o -> o.getProducts().stream())
+                .mapToDouble(Product::getPrice)
+                .sum();
+    }
+
+    public Optional<Product> findByName(String name){
+        return orders.stream()
+                .flatMap(o -> o.getProducts().stream())
+                .filter(p -> p.getName().equals(name))
+                .findFirst();  //findAny();
+    }
+
+    public Optional<Order> findTheMaxValue(){
+        return orders.stream()
+                .max( (o1, o2) -> (int)
+                        (o1.getProducts().stream().mapToDouble(Product::getPrice).sum()-o1.getProducts().stream().mapToDouble(Product::getPrice).sum())
+                );
+    }
+
+    public Optional<Order> findTheMaxValue2(){
+        return orders.stream()
+                .max( (o1, o2) ->  (int)
+                        (o1.getProducts().stream().mapToDouble(Product::getPrice).max().getAsDouble()-
+                                o2.getProducts().stream().mapToDouble(Product::getPrice).max().getAsDouble())
+                );
+    }
 }
