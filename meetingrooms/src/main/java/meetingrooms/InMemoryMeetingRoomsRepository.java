@@ -43,9 +43,9 @@ public class InMemoryMeetingRoomsRepository implements MeetingroomsRepository {
     }
 
     @Override
-    public List<Integer> areaList() {
+    public List<Meetingroom> areaList() {
         return meetingrooms.stream()
-                .map(Meetingroom::getArea)
+                .sorted(Comparator.comparing(Meetingroom::getArea))
                 .collect(Collectors.toList());
     }
 
@@ -58,10 +58,9 @@ public class InMemoryMeetingRoomsRepository implements MeetingroomsRepository {
     }
 
     @Override
-    public List<String> partialSearch(String find) {
+    public List<Meetingroom> partialSearch(String find) {
         return meetingrooms.stream()
-                .map(Meetingroom::getName)
-                .filter(s -> s.contains(find))
+                .filter(s -> s.getName().contains(find))
                 .collect(Collectors.toList());
     }
 

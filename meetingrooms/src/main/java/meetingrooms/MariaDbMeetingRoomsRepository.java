@@ -60,9 +60,9 @@ public class MariaDbMeetingRoomsRepository implements MeetingroomsRepository {
     }
 
     @Override
-    public List<Integer> areaList() {
-        return jdbcTemplate.query("SELECT `room_name` FROM (SELECT `room_name`, row_number() over (ORDER BY `room_name`) as `rn` FROM `meetingrooms`) as `w_rownum` WHERE w_rownum.rn % 2 = 0 ORDER BY `name`",
-                (rs, i) -> rs.getString("room_name"));
+    public List<Meetingroom> areaList() {
+        return jdbcTemplate.query("select id, room_name, width, length from meetingroom order BY (`length` * width);",
+                (rs, i) -> new Meetingroom(rs.getLong("id"), rs.getString("room_name"), rs.getInt("width"), rs.getInt("length")));
     }
 
     @Override
@@ -72,8 +72,8 @@ public class MariaDbMeetingRoomsRepository implements MeetingroomsRepository {
 
     @Override
     public List<Meetingroom> partialSearch(String find) {
-        return jdbcTemplate.query("select id, room_name, width, length from meetingroom where room_name = ?",
-                (rs, i) -> new Meetingroom(rs.getLong("id"), rs.getString("room_name"), rs.getInt("width"), rs.getInt("length")), find);
+        return jdbcTemplate.query("select id, room_name, width, length from meetingroom where room_name = ?;",
+                new Object[]{find}, (rs, i) -> new Meetingroom(rs.getLong("id"), rs.getString("room_name"), rs.getInt("width"), rs.getInt("length")));
     }
 
     @Override

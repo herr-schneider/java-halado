@@ -21,7 +21,9 @@ public String reservedListABC(){
 
 public void evenList(){}
 
-public void areaList(){}
+public void areaList(){
+
+}
 
 public void search(){}
 

@@ -14,11 +14,11 @@ public interface MeetingroomsRepository {
 
     public List<String> evenList();
 
-    public List<Integer> areaList();
+    public List<Meetingroom> areaList();
 
     public List<String> search(String find);
 
-    public List<String> partialSearch(String find);
+    public List<Meetingroom> partialSearch(String find);
 
     public List<Meetingroom> areaSearch(int area);
 }
