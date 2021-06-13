@@ -1,11 +1,15 @@
 package meetingrooms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Meetingroom {
 
   private Long id;
   private String name;
   private int width;
   private int length;
+  private List<Meeting> meetings = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -44,6 +48,10 @@ public class Meetingroom {
 
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public void addMeeting(Meeting meeting){
+        meetings.add(meeting);
     }
 
     public Long getId() {

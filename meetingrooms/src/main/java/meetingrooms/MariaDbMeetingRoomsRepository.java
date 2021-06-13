@@ -78,6 +78,22 @@ public class MariaDbMeetingRoomsRepository implements MeetingroomsRepository {
 
     @Override
     public List<Meetingroom> areaSearch(int area) {
-        return null;
+        return jdbcTemplate.query("select id, room_name, width, length from meetingroom where (`length` * width) = ?;",
+                new Object[]{area}, (rs, i) -> new Meetingroom(rs.getLong("id"), rs.getString("room_name"), rs.getInt("width"), rs.getInt("length")));
+    }
+
+    public List<Meetingroom> findAll() {
+        List<Meetingroom> meetingrooms = jdbcTemplate.query("select id, room_name, width, length from meetingroom ORDER BY room_name;",
+                (rs, i) -> new Meetingroom(rs.getLong("id"), rs.getString("room_name"), rs.getInt("width"), rs.getInt("length")));
+    for (Meetingroom meetingroom : meetingrooms){
+        jdbcTemplate.query("select id, room_id, meeting_name, start, end from meetingroom WHERE room_id = ?;",
+                (rs, i) -> new Meeting(rs.getLong("id"), rs.getString("meeting_name"), rs.getTimestamp("start").toLocalDateTime(),
+                        rs.getTimestamp("end").toLocalDateTime(), rs.getLong("room_id")),
+                meetingroom.getId())
+        .stream()
+        .forEach(meetingroom::addMeeting); //a -> meetingroom.addMeeting(a);
+    }
+
+        return meetingrooms;
     }
 }
